@@ -7,26 +7,34 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.db.MioDB;
+import com.example.demo.dto.request.LoginDTO;
+import com.example.demo.dto.request.RegistrazioneDTO;
+import com.example.demo.dto.response.UtenteDTO;
 import com.example.demo.exceptionHandler.customException.DatiNonValidiException;
+import com.example.demo.facade.UtenteFacade;
 import com.example.demo.model.Film;
 import com.example.demo.model.Utente;
 import com.example.demo.repository.UtenteRepository;
 import com.example.demo.service.UtenteService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(value = "/Utente")
 public class UtenteController {
 	
-	private final UtenteService utenteService;
+	private final UtenteFacade utenteFacade;
 	
-	public UtenteController(UtenteService utenteService) {
-		this.utenteService=utenteService;
+	
+	public UtenteController(UtenteFacade utenteFacade) {
+		this.utenteFacade=utenteFacade;
 	}
 	
 	
@@ -42,12 +50,12 @@ public class UtenteController {
 		}
 	}*/
 	@PostMapping("/registra")
-	public ResponseEntity<Boolean> registraUtente(@RequestParam String nome,@RequestParam String email,@RequestParam LocalDate data,@RequestParam String password) throws DatiNonValidiException{
-		boolean result = utenteService.registraUtente(nome, email, password, data);
+	public ResponseEntity<Boolean> registraUtente(@Valid @RequestBody RegistrazioneDTO r) throws DatiNonValidiException{
+		boolean result = utenteFacade.Registrazione(r);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
 	}
 	
-	@GetMapping("/login")	
+	/*@GetMapping("/login")	
 	public ResponseEntity<Utente> loginUtente(@RequestParam String email,@RequestParam String password){
 		try {
 			Utente u=utenteService.login(email, password);
@@ -56,15 +64,27 @@ public class UtenteController {
 			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,e.getMessage());
 		}
 	}
-	
-	@GetMapping("/getUtenteById")
-	public ResponseEntity<Utente> getUtenteById(@RequestParam long id){
+	@GetMapping("/login")	
+	public ResponseEntity<Utente> loginUtente(@Valid @RequestBody LoginDTO logindto ){
 		try {
-			Utente u=utenteService.getUtenteById(id);
-			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
+			Utente u=utenteService.login(logindto.getEmail(),logindto.getPassword());
+			return ResponseEntity.status(HttpStatus.OK).body(u);
 		}catch(DatiNonValidiException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,e.getMessage());
 		}
+	}*/
+	@GetMapping("/login")	
+	public ResponseEntity<UtenteDTO> loginUtente(@Valid @RequestBody LoginDTO logindto ) throws DatiNonValidiException{
+		UtenteDTO u=utenteFacade.login(logindto);
+		return ResponseEntity.status(HttpStatus.OK).body(u);
+	}
+	
+	
+	
+	@GetMapping("/getUtenteById")
+	public ResponseEntity<UtenteDTO> getUtenteById(@RequestParam long id){
+		UtenteDTO u=utenteFacade.getUtenteById(id);
+		return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(u);
 	}
 	
 	/*@GetMapping("/getUtenteById")	
@@ -75,24 +95,15 @@ public class UtenteController {
 	
 	@PostMapping("/admin")	
 	public ResponseEntity<Boolean> rendiAdmin(@RequestParam long id){
-		boolean r;
-		try {
-			r = utenteService.rendiAdmin(id);
-			return ResponseEntity.status(HttpStatus.ACCEPTED).body(r);
-		} catch (DatiNonValidiException e) {
-			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,e.getMessage());
-		}
+		boolean r = utenteFacade.rendiAdmin(id);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(r);
 	}
 	
 	@PostMapping("/bloccato")	
 	public ResponseEntity<Boolean> bloccaUtente(@RequestParam long id){
-		boolean r;
-		try {
-			r = utenteService.bloccaUtente(id);
-			return ResponseEntity.status(HttpStatus.ACCEPTED).body(r);
-		} catch (DatiNonValidiException e) {
-			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,e.getMessage());
-		}
+		boolean r = utenteFacade.bloccaUtente(id);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(r);
+		
 	}
 	
 	

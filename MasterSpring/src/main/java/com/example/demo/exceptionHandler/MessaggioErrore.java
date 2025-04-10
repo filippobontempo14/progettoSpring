@@ -1,6 +1,7 @@
 package com.example.demo.exceptionHandler;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 
@@ -8,19 +9,20 @@ public class MessaggioErrore {
 	
 	private LocalDateTime timeStamp;
 	private int status;
-	private String messaggio,errore,path;
+	private String nomeStatus;
+	private Map<String, String> errori;
 	
 	public MessaggioErrore() {
 		
 	}
 
-	public MessaggioErrore(int status, String messaggio, String errore, String path) {
+	public MessaggioErrore(HttpStatus status, Map<String, String> errori) {
 
 		this.timeStamp = LocalDateTime.now();
-		this.status = status;
-		this.messaggio = messaggio;
-		this.errore = errore;
-		this.path = path;
+		this.status = status.value();
+		this.nomeStatus=status.name();
+		this.errori=errori;
+		
 	}
 
 	public LocalDateTime getTimeStamp() {
@@ -39,29 +41,23 @@ public class MessaggioErrore {
 		this.status = status;
 	}
 
-	public String getMessaggio() {
-		return messaggio;
+	public Map<String, String> getErrori() {
+		return errori;
 	}
 
-	public void setMessaggio(String messaggio) {
-		this.messaggio = messaggio;
+	public void setErrori(Map<String, String> errori) {
+		this.errori = errori;
 	}
 
-	public String getErrore() {
-		return errore;
+	public String getNomeStatus() {
+		return nomeStatus;
 	}
 
-	public void setErrore(String errore) {
-		this.errore = errore;
+	public void setNomeStatus(String nomeStatus) {
+		this.nomeStatus = nomeStatus;
 	}
 
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
-	}
+	
 	
 	
 	

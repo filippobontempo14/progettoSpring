@@ -20,6 +20,7 @@ import com.example.demo.model.Recensione;
 import com.example.demo.model.Utente;
 import com.example.demo.repository.FilmRepository;
 import com.example.demo.service.FilmService;
+import com.example.demo.service.UtenteService;
 
 @Service
 public class FilmServiceImpl implements FilmService{

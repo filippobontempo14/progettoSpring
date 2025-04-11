@@ -22,22 +22,19 @@ import com.example.demo.facade.UtenteFacade;
 import com.example.demo.model.Film;
 import com.example.demo.model.Utente;
 import com.example.demo.repository.UtenteRepository;
+import com.example.demo.security.GestoreToken;
 import com.example.demo.service.UtenteService;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping(value = "/Utente")
+@RequiredArgsConstructor
+
 public class UtenteController {
 	
 	private final UtenteFacade utenteFacade;
-	
-	
-	public UtenteController(UtenteFacade utenteFacade) {
-		this.utenteFacade=utenteFacade;
-	}
-	
-	
+	private final GestoreToken gestore;
 	
 	/*@PostMapping("/registra")	
 	public ResponseEntity<Boolean> registraUtente(@RequestParam String nome,@RequestParam String email,@RequestParam LocalDate data,@RequestParam String password){
@@ -49,7 +46,7 @@ public class UtenteController {
 			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,e.getMessage());
 		}
 	}*/
-	@PostMapping("/registra")
+	@PostMapping("/all/registra")
 	public ResponseEntity<Boolean> registraUtente(@Valid @RequestBody RegistrazioneDTO r) throws DatiNonValidiException{
 		boolean result = utenteFacade.Registrazione(r);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
@@ -73,15 +70,17 @@ public class UtenteController {
 			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,e.getMessage());
 		}
 	}*/
-	@GetMapping("/login")	
-	public ResponseEntity<UtenteDTO> loginUtente(@Valid @RequestBody LoginDTO logindto ) throws DatiNonValidiException{
-		UtenteDTO u=utenteFacade.login(logindto);
-		return ResponseEntity.status(HttpStatus.OK).body(u);
+	@PostMapping("/all/login")	
+	public ResponseEntity<String> loginUtente(@Valid @RequestBody LoginDTO logindto) throws DatiNonValidiException{
+		//UtenteDTO u=utenteFacade.login(logindto);
+		Utente u=utenteFacade.login(logindto);
+		//return ResponseEntity.status(HttpStatus.OK).body(u);
+		return ResponseEntity.status(HttpStatus.OK).header("Authorization", gestore.generaToken(u)).build();
 	}
 	
 	
 	
-	@GetMapping("/getUtenteById")
+	@GetMapping("/admin/getUtenteById")
 	public ResponseEntity<UtenteDTO> getUtenteById(@RequestParam long id){
 		UtenteDTO u=utenteFacade.getUtenteById(id);
 		return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(u);
@@ -93,13 +92,13 @@ public class UtenteController {
 		return ResponseEntity.ok().body(u);
 	}*/
 	
-	@PostMapping("/admin")	
+	@PostMapping("/admin/rendiAdmin")	
 	public ResponseEntity<Boolean> rendiAdmin(@RequestParam long id){
 		boolean r = utenteFacade.rendiAdmin(id);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(r);
 	}
 	
-	@PostMapping("/bloccato")	
+	@PostMapping("/admin/bloccato")	
 	public ResponseEntity<Boolean> bloccaUtente(@RequestParam long id){
 		boolean r = utenteFacade.bloccaUtente(id);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(r);

@@ -45,11 +45,11 @@ public class RecensioneServiceImpl implements RecensioneService{
 	}
 	
 	@Override
-	public boolean addRecensione(int voto, String testo, long idUtente, long idFilm) throws DatiNonValidiException{
-		Utente u=utenteRepo.findById(idUtente).orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST,"L'utente non esiste"));
+	public boolean addRecensione(Recensione a){
+		/*Utente u=utenteRepo.findById(idUtente).orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST,"L'utente non esiste"));
 		Film f=filmRepo.findById(idFilm).orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST,"Il film non esiste"));
 		if(voto<=0||testo==null||u==null||f==null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Recensione non valida");
-		Recensione a = new Recensione(voto, testo, u,f);
+		Recensione a = new Recensione(voto, testo, u,f);*/
 		recensioneRepo.save(a);
 		return true;
 	}

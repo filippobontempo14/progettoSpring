@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.dto.request.LoginDTO;
 import com.example.demo.exceptionHandler.customException.DatiNonValidiException;
+import com.example.demo.model.Ruolo;
 import com.example.demo.model.Utente;
 import com.example.demo.repository.UtenteRepository;
 import com.example.demo.service.UtenteService;
@@ -86,10 +87,15 @@ public class UtenteServiceImpl implements UtenteService{
 	public boolean rendiAdmin(long id){
 		if(id<=0)return false;
 		Utente u=utenteRepo.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST,"L'id non è valido"));
-		if(u.isAdmin())u.setAdmin(false);
-		else u.setAdmin(true);
+		if(u.getRuolo()==Ruolo.UTENTE)u.setRuolo(Ruolo.ADMIN);
+		else u.setRuolo(Ruolo.UTENTE);
 		utenteRepo.save(u);
 		return true;
+	}
+
+	@Override
+	public Utente getByEmail(String a) {
+		return utenteRepo.findByEmail(a).orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST,"L'email non è valida"));
 	}
 
 }

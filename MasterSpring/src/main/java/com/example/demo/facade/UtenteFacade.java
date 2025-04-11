@@ -11,7 +11,7 @@ public interface UtenteFacade {
 	
 	
 	//boolean noleggiaLibro(NoleggiaLibroDTO dto);
-	UtenteDTO login(LoginDTO dto) throws DatiNonValidiException;
+	Utente login(LoginDTO dto) throws DatiNonValidiException;
 	boolean Registrazione(RegistrazioneDTO dto);
 	UtenteDTO getUtenteById(long id);
 	boolean rendiAdmin(long id);

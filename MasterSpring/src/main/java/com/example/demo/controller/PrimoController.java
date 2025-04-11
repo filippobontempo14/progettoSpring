@@ -54,11 +54,11 @@ public class PrimoController {
 		//return ResponseEntity.ok().build();
 	}
 	
-	@PostMapping("/user/registra")	
+	/*@PostMapping("/user/registra")	
 	public ResponseEntity<String> registraUtente(@RequestParam String nome,@RequestParam String email,@RequestParam LocalDate data,@RequestParam String password){
 		MioDB.getInstance().registraUtente(nome, email, password, data);
 		return ResponseEntity.ok().build();
-	}
+	}*/
 
 }
 

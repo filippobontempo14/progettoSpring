@@ -2,7 +2,12 @@ package com.example.demo.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.demo.dto.request.RecensioneFilmConIdDTO;
 
@@ -12,16 +17,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import lombok.Data;
 
 @Entity
-public class Utente {
+@Data
+public class Utente implements UserDetails{
 
 	private String nome;
 	private LocalDate data;
 	private String email;
 	private String password;
 	private boolean bloccato;
-	private boolean admin;
+	//private boolean admin;
+	private Ruolo ruolo;
 	
 	@OneToMany(mappedBy = "utente", cascade=CascadeType.MERGE)
 	private List<Recensione> recensioniUtente = new ArrayList<>();
@@ -60,96 +68,44 @@ public class Utente {
 	}
 
 	
-	
-
-	public Utente(String nome, LocalDate data, String email, String password, boolean bloccato, boolean admin) {
+	public Utente(String nome, LocalDate data, String email, String password, boolean bloccato, Ruolo ruolo) {
 		
 		this.nome = nome;
 		this.data = data;
 		this.email = email;
 		this.password = password;
 		this.bloccato = bloccato;
-		this.admin = admin;
+		this.ruolo = ruolo;
+	}
+
+	public Utente(String nome, LocalDate data, String email, String password, boolean bloccato) {
+		
+		this.nome = nome;
+		this.data = data;
+		this.email = email;
+		this.password = password;
+		this.bloccato = bloccato;
 		this.id=id;
 	}
 
-
-	public boolean isBloccato() {
-		return bloccato;
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {//ritorna una lista di ruoli che saranno le nostre autorizzazioni
+		return List.of(new SimpleGrantedAuthority("ROLE_"+ruolo.getNome()));
 	}
 
-
-	public void setBloccato(boolean bloccato) {
-		this.bloccato = bloccato;
-	}
-
-
-	public boolean isAdmin() {
-		return admin;
-	}
-
-
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
-	}
-
-
-	public String getNome() {
-		return nome;
-	}
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-	public LocalDate getData() {
-		return data;
-	}
-	public void setData(LocalDate data) {
-		this.data = data;
-	}
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
-	public String getEmail() {
+	@Override
+	public String getUsername() {
 		return email;
 	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
+	
+	@Override
+	public boolean isAccountNonLocked() {
+		return !bloccato;
 	}
 
-
-	public List<Recensione> getRecensioniUtente() {
-		return recensioniUtente;
-	}
+	
 
 
-	public void setRecensioniUtente(List<Recensione> recensioniUtente) {
-		this.recensioniUtente = recensioniUtente;
-	}
-
-	public List<UtenteFilm> getUtenteFilm() {
-		return utenteFilm;
-	}
-
-	public void setUtenteFilm(List<UtenteFilm> utenteFilm) {
-		this.utenteFilm = utenteFilm;
-	}
-
-	public List<UtenteSerie> getUtenteSerie() {
-		return utenteSerie;
-	}
-
-	public void setUtenteSerie(List<UtenteSerie> utenteSerie) {
-		this.utenteSerie = utenteSerie;
-	}
 	
 	
 	

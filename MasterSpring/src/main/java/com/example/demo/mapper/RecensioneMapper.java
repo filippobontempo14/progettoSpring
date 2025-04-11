@@ -5,21 +5,25 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.example.demo.dto.request.RecensioneFilmConIdDTO;
 import com.example.demo.dto.response.RecensioneVotoTestoFilmSerieUtenteDTO;
 import com.example.demo.dto.response.RecensioneVotoTestoResponse;
 import com.example.demo.model.Recensione;
 
 @Component
 public class RecensioneMapper {
+
+    private final UtenteMapper utenteMapper;
 	
 	
 	FilmMapper filmMapper;
 	SerieMapper serieMapper;
 	
 	
-	public RecensioneMapper(FilmMapper filmMapper,SerieMapper serieMapper) {
+	public RecensioneMapper(FilmMapper filmMapper,SerieMapper serieMapper, UtenteMapper utenteMapper) {
 		this.filmMapper = filmMapper;
 		this.serieMapper = serieMapper;
+		this.utenteMapper = utenteMapper;
 	}
 
 	public List<RecensioneVotoTestoResponse> toDto(List<Recensione> r) {
@@ -63,6 +67,20 @@ public class RecensioneMapper {
 		recensione.setTesto(r.getTesto());
 		recensione.setVoto(r.getVoto());
 		recensione.setId(r.getId());
+		
+		return recensione;
+	}
+	
+	public RecensioneFilmConIdDTO toDtoSingolo2(Recensione r) {
+		RecensioneFilmConIdDTO recensione=new RecensioneFilmConIdDTO();
+		
+		
+		recensione.setId_film(filmMapper.toFilmTitolo(r.getFilm()).getId());
+		
+			
+		recensione.setTesto(r.getTesto());
+		recensione.setVoto(r.getVoto());
+		recensione.setId_utente(r.getUtente().getId());
 		
 		return recensione;
 	}

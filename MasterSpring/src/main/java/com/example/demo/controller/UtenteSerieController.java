@@ -29,20 +29,20 @@ private final UtenteSerieService utenteserieService;
 		this.utenteserieService=utenteserieService;
 	}
 	
-	@PostMapping("/aggiornaStatoSerie")
+	@PostMapping("/user/aggiornaStatoSerie")
 	public ResponseEntity<Boolean> aggiornaStatoSerie(@RequestBody AggiornamentoStatoSerieDTO a) throws DatiNonValidiException{
 		boolean r=utenteserieService.aggiornaStatoSerie(a.getIdUtente(), a.getIdSerie(), a.getStato());
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(r);
 	}
 	
-	@GetMapping("/getListaSerieConStato")
+	@GetMapping("/user/getListaSerieConStato")
 	public ResponseEntity<List<SerieConStatoDTO>> getListaSerieConStato(@RequestParam long idU){
 		List<SerieConStatoDTO> lfs=utenteserieService.getListaSerieStato(idU);
 		if(lfs!=null) return ResponseEntity.status(HttpStatus.ACCEPTED).body(lfs);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(lfs);
 	}
 	
-	@PostMapping("/addUtenteSerie")
+	@PostMapping("/admin/addUtenteSerie")
 	public ResponseEntity<Boolean> addUtenteSerie(@RequestParam long idU,@RequestParam long idS) throws DatiNonValidiException{
 		boolean r=utenteserieService.addUtenteSerie(idU, idS);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(r);

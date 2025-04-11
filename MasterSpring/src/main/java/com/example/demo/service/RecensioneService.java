@@ -13,7 +13,7 @@ import com.example.demo.model.Utente;
 
 public interface RecensioneService {
 	
-	public boolean addRecensione(int voto,String testo,long idUtente,long idFilm) throws DatiNonValidiException;
+	public boolean addRecensione(Recensione r);
 	boolean addRecensioneSerie(int voto, String testo, long idUtente, long idSerie);
 	
 	Recensione getById(long id);
@@ -25,10 +25,11 @@ public interface RecensioneService {
 	public RecensioneVotoTestoFilmSerieUtenteDTO modificaRecensione(long id, int voto, String testo);
 	List<RecensioneVotoTestoFilmSerieUtenteDTO> getRecensioniVotoTestoByFilm(long id);
 	List<RecensioneVotoTestoFilmSerieUtenteDTO> getRecensioniVotoTestoBySerie(long id);
+	List<RecensioneVotoTestoFilmSerieUtenteDTO> getRecensioneVotoTestoFilmUtenteDTO(long id);
 	
 	List<TierListDTO> TierList(long idUtente);
 	
-	List<RecensioneVotoTestoFilmSerieUtenteDTO> getRecensioneVotoTestoFilmUtenteDTO(long id);
+	
 	
 	
 }

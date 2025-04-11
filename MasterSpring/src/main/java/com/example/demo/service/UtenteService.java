@@ -16,4 +16,5 @@ public interface UtenteService {
 	boolean bloccaUtente(long id);
 	boolean rendiAdmin(long id);
 	boolean registraUtente(Utente u);
+	Utente getByEmail(String a);
 }

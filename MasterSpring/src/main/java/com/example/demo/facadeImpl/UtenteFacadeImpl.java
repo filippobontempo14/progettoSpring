@@ -22,10 +22,16 @@ public class UtenteFacadeImpl implements UtenteFacade{
 		this.utenteMapper=utenteMapper;
 	}
 
-	@Override
+	/*@Override
 	public UtenteDTO login(LoginDTO dto) throws DatiNonValidiException {
 		Utente u=utenteService.login(dto.getEmail(), dto.getPassword());
 		return utenteMapper.toDto(u);
+		
+	}*/
+	@Override
+	public Utente login(LoginDTO dto) throws DatiNonValidiException {
+		Utente u=utenteService.login(dto.getEmail(), dto.getPassword());
+		return u;
 		
 	}
 

@@ -34,14 +34,14 @@ public final class MioDB {
 	private static long idGenRecensioni=1;
 	
 	
-	public String registraUtente(String nome, String email ,String password, LocalDate data) {
+	/*public String registraUtente(String nome, String email ,String password, LocalDate data) {
 		if (email==null||email.isEmpty())return "Inserisci una mail";
 		Utente u=new Utente(nome, data, email, password,false,false);
 		u.setId(idGenUtente++);
 		utenti.add(u);
 		return null;
 	}
-	
+	*/
 	public boolean loginUtente(String email ,String password) {
 		
 		if (email==null || email.isEmpty() || password==null || password.isEmpty()) {
@@ -67,7 +67,7 @@ public final class MioDB {
 		}
 		return null;
 	}
-	
+	/*
 	public boolean rendiAdmin(long id) {
 		
 		for(int i=0; i<utenti.size(); i++) {
@@ -83,7 +83,7 @@ public final class MioDB {
 		}
 	return false;
 	}
-	
+	*/
 	public boolean bloccaUtente(long id) {
 		
 		for(int i=0; i<utenti.size(); i++) {

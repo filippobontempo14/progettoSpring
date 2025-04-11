@@ -18,6 +18,7 @@ import com.example.demo.dto.response.RecensioneVotoTestoFilmSerieUtenteDTO;
 import com.example.demo.dto.response.RecensioneVotoTestoResponse;
 import com.example.demo.dto.response.TierListDTO;
 import com.example.demo.exceptionHandler.customException.DatiNonValidiException;
+import com.example.demo.facade.RecensioneFacade;
 import com.example.demo.model.Film;
 import com.example.demo.model.Recensione;
 import com.example.demo.model.Utente;
@@ -29,9 +30,16 @@ public class RecensioneController {
 	
 	private final RecensioneService recensioneService;
 	
-	public RecensioneController(RecensioneService recensioneService) {
+	/*public RecensioneController(RecensioneService recensioneService) {
+		this.recensioneService=recensioneService;
+	}*/
+	private final RecensioneFacade recensioneFacade;
+	
+	public RecensioneController(RecensioneFacade recensioneFacade, RecensioneService recensioneService) {
+		this.recensioneFacade=recensioneFacade;
 		this.recensioneService=recensioneService;
 	}
+	
 	
 	/*@PostMapping("/addRecensione")	
 	public ResponseEntity<String> addRecensione(@RequestBody RecensioneFilmConIdRequest r ){
@@ -41,14 +49,14 @@ public class RecensioneController {
 		return ResponseEntity.ok().build();
 	}*/
 	
-	@PostMapping("/addRecensione")	
-	public ResponseEntity<Void> addRecensione(@RequestBody RecensioneFilmConIdDTO r ) throws DatiNonValidiException{
-		boolean result=recensioneService.addRecensione(r.getVoto(),r.getTesto(), r.getId_utente(),r.getId_film());
-		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+	@PostMapping("/user/addRecensione")	
+	public ResponseEntity<Boolean> addRecensione(@RequestBody RecensioneFilmConIdDTO r ) {
+		boolean result=recensioneFacade.addRecensione(r);
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
 	}
 	
-	@PostMapping("/addRecensioneSerie")	
-	public ResponseEntity<Void> addRecensioneSerie(@RequestBody RecensioneSerieConIdDTO r ) throws DatiNonValidiException{
+	@PostMapping("/user/addRecensioneSerie")	
+	public ResponseEntity<Void> addRecensioneSerie(@RequestBody RecensioneSerieConIdDTO r ) {
 		boolean result=recensioneService.addRecensioneSerie(r.getVoto(),r.getTesto(), r.getId_utente(),r.getId_serie());
 		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 	}
@@ -60,7 +68,7 @@ public class RecensioneController {
 		if(r!=null) return ResponseEntity.status(HttpStatus.ACCEPTED).body(r);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}*/
-	@GetMapping("/getRecensioneVotoTestoByFilm")	
+	@GetMapping("/user/getRecensioneVotoTestoByFilm")	
 	public ResponseEntity<List<RecensioneVotoTestoFilmSerieUtenteDTO>> getRecensioniVotoTestoByFilm(@RequestParam long id){
 		List<RecensioneVotoTestoFilmSerieUtenteDTO> r = recensioneService.getRecensioniVotoTestoByFilm(id);
 		if(r!=null) return ResponseEntity.status(HttpStatus.ACCEPTED).body(r);
@@ -68,21 +76,21 @@ public class RecensioneController {
 	}
 	
 	
-	@GetMapping("/getRecensioneByUtente")	
+	@GetMapping("/admin/getRecensioneByUtente")	
 	public ResponseEntity<List<Recensione>> getRecensioneByUtente(@RequestParam long id){
 		List<Recensione> r = recensioneService.getRecensioniByUtente(id);
 		if(r!=null) return ResponseEntity.status(HttpStatus.ACCEPTED).body(r);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 	
-	@PostMapping("/aggiornaRecensioneFilm")
+	@PostMapping("/user/aggiornaRecensioneFilm")
 	public ResponseEntity<RecensioneVotoTestoFilmSerieUtenteDTO> aggiornaRecensioneFilm(@RequestParam long id, @RequestParam int voto, @RequestParam String testo){
 		RecensioneVotoTestoFilmSerieUtenteDTO r=recensioneService.modificaRecensione(id, voto, testo);
 		if(r!=null) return ResponseEntity.status(HttpStatus.ACCEPTED).body(r);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 	
-	@GetMapping("/TierList")
+	@GetMapping("/user/TierList")
 	public ResponseEntity<List<TierListDTO>> TierList(@RequestParam long idUtente){
 		List<TierListDTO> tot = recensioneService.TierList(idUtente);
 		if(tot!=null) return ResponseEntity.status(HttpStatus.ACCEPTED).body(tot);

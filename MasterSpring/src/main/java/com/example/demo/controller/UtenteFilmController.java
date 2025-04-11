@@ -27,21 +27,21 @@ public class UtenteFilmController {
 		this.utentefilmService=utentefilmService;
 	}
 	
-	@PostMapping("/aggiornaStatoFilm")
+	@PostMapping("/user/aggiornaStatoFilm")
 	public ResponseEntity<Boolean> aggiornaStatoFilm(@RequestBody AggiornamentoStatoFilmDTO a) throws DatiNonValidiException{
 		boolean r=utentefilmService.aggiornaStatoFilm(a.getIdUtente(), a.getIdFilm(), a.getStato());
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(r);
 		
 	}
 	
-	@GetMapping("/getListaFilmConStato")
+	@GetMapping("/user/getListaFilmConStato")
 	public ResponseEntity<List<FilmConStatoDTO>> getListaFilmConStato(@RequestParam long idU){
 		List<FilmConStatoDTO> lfs=utentefilmService.getListaFilmStato(idU);
 		if(lfs!=null) return ResponseEntity.status(HttpStatus.ACCEPTED).body(lfs);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(lfs);
 	}
 	
-	@PostMapping("/addUtenteFilm")
+	@PostMapping("/admin/addUtenteFilm")
 	public ResponseEntity<Boolean> addUtenteFilm(@RequestParam long idU,@RequestParam long idF) throws DatiNonValidiException{
 		boolean r=utentefilmService.addUtenteFilm(idU, idF);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(r);

@@ -11,7 +11,7 @@ public class LoginDTO {
 	@Email
 	private String email;
 	@NotBlank
-	@Size(min=1,max=10)
+	@Size(min=0,max=10)
 	private String password;
 	
 	

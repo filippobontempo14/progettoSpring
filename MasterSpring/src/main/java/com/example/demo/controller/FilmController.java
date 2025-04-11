@@ -25,7 +25,6 @@ import com.example.demo.repository.FilmRepository;
 import com.example.demo.service.FilmService;
 
 @RestController
-@RequestMapping(value = "/Film")
 public class FilmController {
 	
 	private final FilmService filmService;
@@ -35,20 +34,20 @@ public class FilmController {
 	}
 	
 	
-	@PostMapping("/addFilm")	
+	@PostMapping("/admin/addFilm")	
 	public ResponseEntity<Boolean> addFilm(@RequestBody addFilmDTO a) throws DatiNonValidiException{
 		boolean r = filmService.addFilm(a);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).build();
 	}
 	
-	@GetMapping("/getListaFilm")	
+	@GetMapping("/user/getListaFilm")	
 	public ResponseEntity<List<Film>> getListaFilm(){
 		List<Film> f=filmService.getListaFilm();
 		if(f!=null) return ResponseEntity.status(HttpStatus.OK).body(f);
 		return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
 	}
 	
-	@PostMapping("/bloccaFilm")	
+	@PostMapping("/admin/bloccaFilm")	
 	public ResponseEntity<Boolean> bloccaFilm(@RequestParam long id) throws DatiNonValidiException{
 		boolean r = filmService.bloccaFilm(id);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(r);
@@ -60,7 +59,7 @@ public class FilmController {
 		return ResponseEntity.status(HttpStatus.OK).body(f);
 	}
 	
-	@GetMapping("/getMedia")	
+	@GetMapping("/all/getMedia")	
 	public ResponseEntity<List<MediaFilmDTO>> getMediaFilm(){
 		List<MediaFilmDTO> m=filmService.getMediaFilm();
 		if(m!=null) return ResponseEntity.status(HttpStatus.OK).body(m);

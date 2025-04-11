@@ -30,7 +30,7 @@ public class SerieController {
 		this.serieService=serieService;
 	}
 	
-	@PostMapping("/addSerie")	
+	@PostMapping("/user/addSerie")	
 	public ResponseEntity<Boolean> addSerie(@RequestBody SerieRequest s) throws DatiNonValidiException{
 		boolean r=serieService.addSerie(s.getTitolo(),s.getN_episodi(),s.getGenere());
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(r);
@@ -44,7 +44,7 @@ public class SerieController {
 		return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
 	}
 	
-	@PostMapping("/bloccaSerie")	
+	@PostMapping("/admin/bloccaSerie")	
 	public ResponseEntity<Boolean> bloccaSerie(@RequestParam long id) throws DatiNonValidiException{
 		boolean r=serieService.bloccaSerie(id);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).build();		
